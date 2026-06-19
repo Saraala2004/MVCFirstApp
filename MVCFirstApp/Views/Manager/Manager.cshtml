@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Manager";
+}
+
+<h1>Manager</h1>
+
+<div class="mt-4" style="width:250px;">
+
+    <div class="mb-2">
+        <a asp-controller="Manager" asp-action="AddTask"
+           class="btn btn-outline-dark w-100"
+           style="border-radius:0;">
+            ➕ Add Task
+        </a>
+    </div>
+
+    <div class="mb-2">
+        <a asp-controller="Manager" asp-action="MonitorTasks"
+           class="btn btn-outline-dark w-100"
+           style="border-radius:0;">
+            📊 Monitor Tasks
+        </a>
+    </div>
+
+    <div class="mb-2">
+        <a asp-controller="Manager" asp-action="ReviewReports"
+           class="btn btn-outline-dark w-100"
+           style="border-radius:0;">
+            📄 Review Reports
+        </a>
+    </div>
+
+    <div class="mb-2">
+        <a asp-controller="Manager" asp-action="ArchiveTasks"
+           class="btn btn-outline-dark w-100"
+           style="border-radius:0;">
+            📁 Archive Tasks
+        </a>
+    </div>
+
+    <div class="mb-2">
+        <a asp-controller="User" asp-action="Login"
+           class="btn btn-outline-danger w-100"
+           style="border-radius:0;">
+            🚪 Logout
+        </a>
+    </div>
+
+</div>

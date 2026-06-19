@@ -1,0 +1,28 @@
+﻿@model MVCFirstApp.Models.TaskItem
+<h2 style="color: green;"> Task Details</h2>
+<form>
+    <div class="mb-3">
+        <label>Title</label>
+        <input value="@Model.Title"
+               class="form-control"
+               readonly />
+    </div>
+    <div class="mb-3">
+        <label>Description</label>
+        <input value="@Model.Description"
+               class="form-control"
+               readonly />
+    </div>
+    <div class="mb-3">
+        <label>Target Entity</label>
+        <input value="@Model.TargetEntity"
+               class="form-control"
+               readonly />
+    </div>
+    <div class="mb-3">
+        <label>Due Date</label>
+        <input value="@Model.DueDate"
+               class="form-control"
+               readonly />
+    </div>
+</form>

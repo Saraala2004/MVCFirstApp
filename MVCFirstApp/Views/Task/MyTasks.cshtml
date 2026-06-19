@@ -1,0 +1,39 @@
+﻿@model List< MVCFirstApp.Models.TaskItem>
+<h2 style="color: dodgerblue;">My Tasks</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>AssignedToUserName</th>
+            <th>TargetEntity</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var task in Model)
+        {
+            <tr>
+                <td>@task.AssignedToUserName</td>
+                <td>@task.TargetEntity</td>
+                <td>@task.DueDate</td>
+                <td>@task.Status</td>
+                <td>
+                    <a asp-action="Details"
+                       asp-route-id="@task.Id"
+                       class="btn btn-success ">
+                        Details
+                    </a>
+                    <a asp-controller="Report"
+                       asp-action="Create"
+                       asp-route-taskId="@task.Id"
+                       class="btn btn-primary">
+                        Create Report
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

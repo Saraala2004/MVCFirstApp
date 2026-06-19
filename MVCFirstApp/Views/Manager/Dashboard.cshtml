@@ -1,0 +1,156 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<div class="container mt-5">
+
+    <div class="bg-white p-5 shadow-sm rounded">
+
+        <div class="row align-items-center text-center">
+
+            <!-- LEFT SIDE -->
+
+            <div class="col-md-4 text-start">
+
+                <h1 style="font-weight:bold;
+                    line-height:50px;">
+
+                    House Of Represented
+
+                    <br />
+
+                    Administrative Control
+
+                    <br />
+
+                    Authority
+
+                </h1>
+
+            </div>
+
+            <!-- CENTER LOGO -->
+
+            <div class="col-md-4">
+                <img src="~/images/photo_2026-05-20_14-02-39.jpg"
+                     width="250" />
+
+            </div>
+
+            <!-- RIGHT SIDE -->
+
+            <div class="col-md-4 text-end">
+
+                <h1 style="font-weight:bold;
+                    line-height:50px;">
+
+                    مجلس النواب
+
+                    <br />
+
+                    هيئة الرقابة الإدارية
+
+                </h1>
+
+            </div>
+
+        </div>
+
+        <!-- CENTER TEXT -->
+
+        <div class="text-center mt-5">
+
+            <h1 style="font-size:45px;
+                font-weight:bold;">
+
+                فرع هيئة الرقابة الإدارية
+
+            </h1>
+
+            <h1 class="mt-3"
+                style="font-size:40px;
+                font-weight:bold;">
+
+                بنغازي
+
+            </h1>
+
+            <h2 class="mt-5"
+                style="font-size:35px;">
+
+                إدارة الرقابة على الجهات التابعة للوزارات
+
+            </h2>
+
+            
+            <div style="
+                display:flex;
+                flex-wrap:wrap;
+                gap:25px;
+                justify-content:center;
+                padding:20px 40px;
+                ">
+
+                <div style="
+                    flex:1;
+                    min-width:220px;
+                    max-width:250px;
+                    padding:25px;
+                    border:1px solid #ccc;
+                    border-radius:12px;
+                    text-align:center;
+                    ">
+                    <h3>Tasks</h3>
+                    <p>@ViewBag.TotalTasks</p>
+                </div>
+
+                <div style="
+                    flex:1;
+                    min-width:220px;
+                    max-width:250px;
+                    padding:25px;
+                    border:1px solid #ccc;
+                    border-radius:12px;
+                    text-align:center;
+                    ">
+                    <h3>Reports</h3>
+                    <p>@ViewBag.TotalReports</p>
+                </div>
+
+                <div style="
+                    flex:1;
+                    min-width:220px;
+                    max-width:250px;
+                    padding:25px;
+                    border:1px solid #ccc;
+                    border-radius:12px;
+                    text-align:center;
+                    ">
+                    <h3>Users</h3>
+                    <p>@ViewBag.TotalUsers</p>
+                </div>
+
+                <div style="
+                    flex:1;
+                    min-width:220px;
+                    max-width:250px;
+                    padding:25px;
+                    border:1px solid #ccc;
+                    border-radius:12px;
+                    text-align:center;
+                    ">
+                    <h3>Completion</h3>
+                    <p>@ViewBag.ReportPercentage %</p>
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,94 @@
+﻿@using MVCFirstApp.Models
+@model List<TaskItem>
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success" id="successMessage">
+        @TempData["Success"]
+    </div>
+}
+<h2 style="margin-bottom:30px;">Task List</h2>
+<form method="get"
+      style="margin-bottom:20px;">
+    <input type="number"
+           name="id"
+           placeholder="Enter Task ID" />
+
+    <input type="text"
+           name="employeeName"
+           placeholder="Enter Employee Name " />
+
+    <button type="submit" class="btn btn-primary">
+        Search
+    </button>
+    <a href="/Task/TasksList" class="btn btn-secondary">
+        Show All
+    </a>
+</form>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>DueDate</th>
+            <th>Status</th>
+            <th>TargetEntity</th>
+            <th>AssignedToUserName</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Title</td>
+                <td>@item.Description</td>
+                <td>@item.DueDate</td>
+                <td>@item.Status</td>
+                <td>@item.TargetEntity</td>
+                <td>@item.AssignedToUserName</td>
+
+                <td>
+                    <a href="/Task/Edit/@item.Id" class="btn btn-warning btn-sm">
+                        Edit
+                    </a>
+                    <a href="/Task/Delete/@item.Id"
+                       class="btn btn-danger"
+                       onclick="confirmDelete(event, this.href)">
+                        Delete
+                    </a>
+
+                 
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    function confirmDelete(event, url) {
+
+        event.preventDefault();
+
+        Swal.fire({
+            title: 'Delete Task?',
+            text: 'This task will be permanently deleted.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Delete',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d'
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+
+        });
+    }
+</script>
+<script>
+    setTimeout(function () {
+        document.getElementById("successMessage").style.display = "none";
+    }, 3000);
+</script>

@@ -1,0 +1,56 @@
+﻿<html dir="ltr" lang="en">
+<div class="container-fluid px-4">
+
+    <h2>Create Task</h2>
+
+    <form method="post" asp-action="Create">
+
+        <div class="mb-3">
+            <label>Target Entity</label>
+            <input type="text" name="TargetEntity" class="form-control" required />
+        </div>
+
+        
+        <div class="mb-3">
+            <label>Title</label>
+            <input type="text"
+                   name="Title"
+                   class="form-control"
+                   required />
+
+          
+        </div>
+        <div class="mb-3">
+            <label>Description</label>
+            <input type="text"
+                   name="Description"
+                   class="form-control"
+                   required />
+        </div>
+        <div class="mb-3">
+            <label>DueDate</label>
+            <input type="datetime-local" name="DueDate" class="form-control" required
+                   value="@Model.DueDate.ToString("yyyy-MM-ddTHH:mm")" />
+        </div>
+        <div class="mb-3">
+            <label>Employee Name</label>
+            <select name="AssignedToUserName" class="form-control" required>
+                <option value="Ahmed">Ahmed</option>
+                <option value="Ali">Ali</option>
+                <option value="Mohammed">Mohammed</option>
+                <option value="Asmaa">Asmaa</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">
+            Creat Task
+        </button>
+
+    </form>
+
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");//يشتغل على تحقق في واجهه
+    }
+}

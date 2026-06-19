@@ -1,0 +1,96 @@
+﻿@model List<MVCFirstApp.Models.Report>
+
+<h2>Reports List</h2>
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Task ID</th>
+            <th>User ID</th>
+            <th>Summary</th>
+            <th>Status</th>
+            <th>Comment</th>
+            <th>Created Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var report in Model)
+        {
+            <tr>
+
+                <td>@report.ReportId</td>
+
+                <td>@report.TaskId</td>
+
+                <td>@report.UserId</td>
+
+                <td>@report.Summary</td>
+
+                <td>@report.Status</td>
+
+                <td>@report.ManagerComment</td>
+
+                <td>@report.CreatedDate</td>
+
+                <td>
+
+                    <a asp-action="Edit"
+                       asp-route-id="@report.ReportId"
+                       class="btn btn-warning btn-sm">
+                        Edit
+                    </a>
+
+                    <a asp-action="Approve"
+                       asp-route-id="@report.ReportId"
+                       class="btn btn-success btn-sm">
+                        Approve
+                    </a>
+
+                    <a href="@Url.Action("Delete", new { id = report.ReportId })"
+                       class="btn btn-danger btn-sm"
+                       onclick="confirmDelete(event, this.href)">
+                        Delete
+                    </a>
+
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+   
+    
+</table>
+
+<a asp-action="Create" class="btn btn-primary">
+    Create New Report
+</a>
+<script>
+    function confirmDelete(event, url) {
+
+        event.preventDefault();
+
+        Swal.fire({
+            title: 'Delete Report?',
+            text: 'This Report will be permanently deleted.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Delete',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d'
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+
+        });
+    }
+</script>

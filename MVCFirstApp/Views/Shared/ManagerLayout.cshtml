@@ -1,0 +1,253 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - MVCFirstApp </title>
+
+    <!-- Bootstrap -->
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Site CSS -->
+
+    <link rel="stylesheet"
+          href="~/css/site.css" />
+
+    <style>
+
+        body {
+        background-color: #f3f4f6;
+        margin: 0;
+        overflow-x: hidden;
+        }
+
+        /* TOP NAVBAR */
+
+        .top-navbar {
+        background-color: #d1d5db;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 25px;
+        }
+
+        .project-title {
+        font-size: 25px;
+        font-weight: bold;
+        color: black;
+        }
+
+        .nav-links a {
+        text-decoration: none;
+        color: black;
+        margin-left: 25px;
+        font-size: 20px;
+        font-weight: 500;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+        position: fixed;
+        top: 0;
+        left: -260px;
+        width: 260px;
+        height: 100%;
+        background-color: #1f2937;
+        transition: 0.3s;
+        padding-top: 90px;
+        z-index: 1000;
+        }
+
+        .sidebar.active {
+        left: 0;
+        }
+
+        .sidebar a {
+        display: block;
+        color: white;
+        text-decoration: none;
+        padding: 18px 25px;
+        font-size: 22px;
+        }
+
+        .sidebar a:hover {
+        background-color: #374151;
+        }
+
+        /* MENU BUTTON */
+
+        .menu-btn {
+        font-size: 35px;
+        cursor: pointer;
+        margin-right: 20px;
+        }
+
+        /* CONTENT */
+
+        .content {
+        padding: 30px;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <!-- NAVBAR -->
+
+    <div class="top-navbar">
+
+        <div class="d-flex align-items-center">
+
+            <!-- MENU BUTTON -->
+
+            <span class="menu-btn"
+                  onclick="toggleSidebar()">
+
+                ☰
+
+            </span>
+
+            <!-- PROJECT TITLE -->
+
+            <span class="project-title">
+
+                Electronic System for Managing Assignments and Reports
+
+            </span>
+
+        </div>
+
+        <!-- RIGHT LINKS -->
+
+        <div class="nav-links">
+
+            <a href="#">Home</a>
+
+            <a href="#">About</a>
+
+            <a href="#">Help</a>
+
+            <a href="#"
+               onclick="confirmLogout(event)">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar"
+         id="sidebar">
+
+        <a href="/Manager/Dashboard">
+
+            Dashboard
+
+        </a>
+
+        <a href="/Manager/Tasks">
+
+            Tasks
+
+        </a>
+
+        <a href="/Manager/Reports">
+
+            Reports
+
+        </a>
+
+        
+
+        <a href="/Manager/Login">
+
+            Login
+
+        </a>
+
+    </div>
+
+    <!-- PAGE CONTENT -->
+
+    <div class="content">
+
+        @RenderBody()
+
+    </div>
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        function toggleSidebar() {
+
+        document
+        .getElementById("sidebar")
+        .classList
+        .toggle("active");
+        }
+
+        function logoutConfirm() {
+
+        let result =
+        confirm("Are you sure you want to logout?");
+
+        if (result) {
+
+        window.location.href =
+        "/Manager/Login";
+        }
+        }
+
+    </script>
+    <script>
+
+        function confirmLogout(event) {
+        event.preventDefault();
+
+        Swal.fire({
+
+        title: 'Logout?',
+
+        text: 'Are you sure you want to logout?',
+
+        icon: 'warning',
+
+        showCancelButton: true,
+
+        confirmButtonText: 'Yes, Logout',
+
+        cancelButtonText: 'Cancel',
+
+        confirmButtonColor: '#d33',
+
+        cancelButtonColor: '#6c757d'
+
+        }).then((result) => {
+
+        if (result.isConfirmed) {
+
+        window.location.href = "/Manager/Login";
+        }
+
+        });
+        }
+
+    </script>
+</body>
+
+</html>

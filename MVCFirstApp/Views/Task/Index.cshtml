@@ -1,0 +1,45 @@
+﻿@using MVCFirstApp.Models
+@model List<TaskItem>
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Task statistics</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Task statistics</li>
+    </ol>
+    <div class="row">
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body">Not Started Tasks:@ViewBag.NotStartedTasks</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-warning text-white mb-4">
+                <div class="card-body">In Progress Tasks:@ViewBag.InProgressTasks</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">Completed Tasks:@ViewBag.CompletedTasks</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">Delayed Tasks:@ViewBag.DelayedTasks</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>

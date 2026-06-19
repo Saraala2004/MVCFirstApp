@@ -1,0 +1,31 @@
+﻿@model MVCFirstApp.Models.Report
+
+<h2 style="color: green;">Create Report</h2>
+
+<form asp-action="Create" method="post">
+
+    <div class="mb-3">
+        <label>Task ID</label>
+        <input asp-for="TaskId" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>User ID</label>
+        <input asp-for="UserId" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Summary</label>
+        <textarea asp-for="Summary" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Employee Opinion</label>
+        <textarea asp-for="EmployeeOpinion" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Save Report
+    </button>
+
+</form>
