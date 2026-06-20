@@ -4,242 +4,155 @@
 <head>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta charset="utf-8" />
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MVCFirstApp </title>
 
-    <!-- Bootstrap -->
-
-    <link rel="stylesheet"
-          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-
-    <!-- Site CSS -->
-
-    <link rel="stylesheet"
-          href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
 
     <style>
-
         body {
-        background-color: #f3f4f6;
-        margin: 0;
-        overflow-x: hidden;
+            background-color: #f3f4f6;
+            margin: 0;
+            overflow-x: hidden;
         }
 
         /* TOP NAVBAR */
-
         .top-navbar {
-        background-color: #d1d5db;
-        height: 70px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 25px;
+            background-color: #d1d5db;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            position: fixed; /* تعديل: ثابت فوق الشاشة ديماً */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1050; /* تعديل: رقم عالي عشان ما تتغطاش الكتيبه */
         }
 
         .project-title {
-        font-size: 25px;
-        font-weight: bold;
-        color: black;
+            font-size: 25px;
+            font-weight: bold;
+            color: black;
         }
 
         .nav-links a {
-        text-decoration: none;
-        color: black;
-        margin-left: 25px;
-        font-size: 20px;
-        font-weight: 500;
+            text-decoration: none;
+            color: black;
+            margin-left: 25px;
+            font-size: 20px;
+            font-weight: 500;
         }
 
         /* SIDEBAR */
-
         .sidebar {
-        position: fixed;
-        top: 0;
-        left: -260px;
-        width: 260px;
-        height: 100%;
-        background-color: #1f2937;
-        transition: 0.3s;
-        padding-top: 90px;
-        z-index: 1000;
+            position: fixed;
+            top: 70px; /* تعديل: تبدأ من تحت الهيدر تماماً */
+            left: -260px;
+            width: 260px;
+            height: calc(100% - 70px); /* تعديل: تأخذ باقي طول الشاشة */
+            background-color: #1f2937;
+            transition: 0.3s ease;
+            padding-top: 20px;
+            z-index: 1000;
         }
 
         .sidebar.active {
-        left: 0;
+            left: 0;
         }
 
         .sidebar a {
-        display: block;
-        color: white;
-        text-decoration: none;
-        padding: 18px 25px;
-        font-size: 22px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 18px 25px;
+            font-size: 22px;
         }
 
         .sidebar a:hover {
-        background-color: #374151;
+            background-color: #374151;
         }
 
         /* MENU BUTTON */
-
         .menu-btn {
-        font-size: 35px;
-        cursor: pointer;
-        margin-right: 20px;
+            font-size: 35px;
+            cursor: pointer;
+            margin-right: 20px;
         }
 
         /* CONTENT */
-
         .content {
-        padding: 30px;
+            padding: 30px;
+            margin-top: 70px; /* تعديل: مسافة أمان عشان الجدول ما يخش تحت الهيدر */
+            margin-left: 0px;
+            transition: 0.3s ease;
         }
 
+        /* حالة اندفاع المحتوى لليمين عند فتح القائمة */
+        .content.active {
+            margin-left: 260px;
+        }
     </style>
-
 </head>
+
 <body>
 
-    <!-- NAVBAR -->
-
     <div class="top-navbar">
-
         <div class="d-flex align-items-center">
-
-            <!-- MENU BUTTON -->
-
-            <span class="menu-btn"
-                  onclick="toggleSidebar()">
-
-                ☰
-
-            </span>
-
-            <!-- PROJECT TITLE -->
-
+            <span class="menu-btn" onclick="toggleSidebar()">☰</span>
             <span class="project-title">
-
                 Electronic System for Managing Assignments and Reports
-
             </span>
-
         </div>
-
-        <!-- RIGHT LINKS -->
 
         <div class="nav-links">
-
             <a href="#">Home</a>
-
             <a href="#">About</a>
-
             <a href="#">Help</a>
-
-            <a href="#"
-               onclick="confirmLogout(event)">
-
-                Logout
-
-            </a>
+            <a href="#" onclick="confirmLogout(event)">Logout</a>
         </div>
-
     </div>
 
-    <!-- SIDEBAR -->
-
-    <div class="sidebar"
-         id="sidebar">
-
-        <a href="/Admin/Dashboard">
-
-            Dashboard
-
-        </a>
-
-     
-
-        <a href="/Admin/Users">
-
-            Users
-
-        </a>
-
-        <a href="/Admin/Login">
-
-            Login
-
-        </a>
-
+    <div class="sidebar" id="sidebar">
+        <a href="/Admin/Dashboard">Dashboard</a>
+        <li class="nav-item">
+            <a class="nav-link text-white" asp-controller="User" asp-action="Create">
+                <i class="fas fa-user-plus me-2"></i> Add Users
+            </a>
+        </li>
+        
     </div>
-
-    <!-- PAGE CONTENT -->
 
     <div class="content">
-
         @RenderBody()
-
     </div>
 
-    <!-- JAVASCRIPT -->
-
     <script>
-
         function toggleSidebar() {
-
-        document
-        .getElementById("sidebar")
-        .classList
-        .toggle("active");
+            // التعديل السحري: يفتح ويسكر ويدف المحتوى بدون ما يطبع كود على الشاشة
+            document.getElementById("sidebar").classList.toggle("active");
+            document.querySelector(".content").classList.toggle("active");
         }
-
-        function logoutConfirm() {
-
-        let result =
-        confirm("Are you sure you want to logout?");
-
-        if (result) {
-
-        window.location.href =
-        "/Manager/Login";
-        }
-        }
-
-    </script>
-    <script>
 
         function confirmLogout(event) {
-        event.preventDefault();
-
-        Swal.fire({
-
-        title: 'Logout?',
-
-        text: 'Are you sure you want to logout?',
-
-        icon: 'warning',
-
+            event.preventDefault();
+            Swal.fire({
+                title: 'Logout?',
+                text: 'Are you sure you want to logout?',
+                icon: 'warning',
         showCancelButton: true,
-
         confirmButtonText: 'Yes, Logout',
-
         cancelButtonText: 'Cancel',
-
         confirmButtonColor: '#d33',
-
         cancelButtonColor: '#6c757d'
-
         }).then((result) => {
-
         if (result.isConfirmed) {
-
-        window.location.href = "/Manager/Login";
+        window.location.href = "/Admin/Login"; // تعديل مسار تسجيل خروج الأدمن
         }
-
         });
         }
-
     </script>
 </body>
 

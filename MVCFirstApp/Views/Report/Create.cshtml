@@ -4,28 +4,34 @@
 
 <form asp-action="Create" method="post">
 
+   
+    <input type="hidden" asp-for="TaskId" />
+    <input type="hidden" asp-for="UserId" />
+
+   
+
     <div class="mb-3">
-        <label>Task ID</label>
-        <input asp-for="TaskId" class="form-control" />
+        <label asp-for="Summary" class="form-label" style="font-weight: bold;">Report Summary</label>
+
+        <textarea asp-for="Summary" class="form-control" rows="5" placeholder="Write the report summary here..."></textarea>
+
+        <span asp-validation-for="Summary" class="text-danger" style="font-weight: bold;"></span>
     </div>
 
     <div class="mb-3">
-        <label>User ID</label>
-        <input asp-for="UserId" class="form-control" />
-    </div>
+        <label asp-for="EmployeeOpinion" class="form-label" style="font-weight: bold;">Employee Opinion (Optional)</label>
 
-    <div class="mb-3">
-        <label>Summary</label>
-        <textarea asp-for="Summary" class="form-control"></textarea>
-    </div>
+        <textarea asp-for="EmployeeOpinion" class="form-control" rows="3" placeholder="Write your opinion here..."></textarea>
 
-    <div class="mb-3">
-        <label>Employee Opinion</label>
-        <textarea asp-for="EmployeeOpinion" class="form-control"></textarea>
+        <span asp-validation-for="EmployeeOpinion" class="text-danger" style="font-weight: bold;"></span>
     </div>
-
     <button type="submit" class="btn btn-success">
         Save Report
     </button>
 
 </form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");//يشتغل على تحقق في واجهه
+    }
+}

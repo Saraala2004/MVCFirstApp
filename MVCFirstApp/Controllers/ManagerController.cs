@@ -4,11 +4,20 @@ namespace MVCFirstApp.Controllers
 {
     public class ManagerController : Controller
     {
-        public IActionResult Manager()
+        
+        public IActionResult Dashboard()
         {
             return View();
         }
-        public IActionResult Dashboard()
+        public IActionResult TasksStatistics()
+        {
+            return View();
+        }
+        public IActionResult AssignTask()
+        {
+            return View();
+        }
+        public IActionResult EmployeeReports()
         {
             return View();
         }

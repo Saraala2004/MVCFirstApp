@@ -1,5 +1,8 @@
 ﻿@using MVCFirstApp.Models
 @model List<TaskItem>
+@{
+    Layout = "~/Views/Shared/ManagerLayout.cshtml";
+}
 @if (TempData["Success"] != null)
 {
     <div class="alert alert-success" id="successMessage">

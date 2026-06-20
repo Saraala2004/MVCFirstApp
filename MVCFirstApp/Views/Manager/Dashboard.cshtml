@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Dashboard";
 
-    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+    Layout = "~/Views/Shared/ManagerLayout.cshtml";
 }
 
 <div class="container mt-5">
@@ -85,67 +85,7 @@
             </h2>
 
             
-            <div style="
-                display:flex;
-                flex-wrap:wrap;
-                gap:25px;
-                justify-content:center;
-                padding:20px 40px;
-                ">
-
-                <div style="
-                    flex:1;
-                    min-width:220px;
-                    max-width:250px;
-                    padding:25px;
-                    border:1px solid #ccc;
-                    border-radius:12px;
-                    text-align:center;
-                    ">
-                    <h3>Tasks</h3>
-                    <p>@ViewBag.TotalTasks</p>
-                </div>
-
-                <div style="
-                    flex:1;
-                    min-width:220px;
-                    max-width:250px;
-                    padding:25px;
-                    border:1px solid #ccc;
-                    border-radius:12px;
-                    text-align:center;
-                    ">
-                    <h3>Reports</h3>
-                    <p>@ViewBag.TotalReports</p>
-                </div>
-
-                <div style="
-                    flex:1;
-                    min-width:220px;
-                    max-width:250px;
-                    padding:25px;
-                    border:1px solid #ccc;
-                    border-radius:12px;
-                    text-align:center;
-                    ">
-                    <h3>Users</h3>
-                    <p>@ViewBag.TotalUsers</p>
-                </div>
-
-                <div style="
-                    flex:1;
-                    min-width:220px;
-                    max-width:250px;
-                    padding:25px;
-                    border:1px solid #ccc;
-                    border-radius:12px;
-                    text-align:center;
-                    ">
-                    <h3>Completion</h3>
-                    <p>@ViewBag.ReportPercentage %</p>
-                </div>
-
-            </div>
+            
 
 
 

@@ -8,14 +8,21 @@ namespace WebDevelopment.Controllers
     {
         static List<TaskItem> tasks = new List<TaskItem>();
         private static List<Report> _reports = new List<Report>();
-        public IActionResult Create()
+        public IActionResult Create(int taskId)
         {
-
-            return View(new Report { CreatedDate = DateTime.Now });
+            var report = new Report
+            {
+                TaskId = taskId,
+                CreatedDate = DateTime.Now
+            };
+            return View(report);
         }
         [HttpPost]
+
         public IActionResult Create(Report report)
         {
+           
+
             report.ReportId = _reports.Count + 1;
             report.Status = "Pending Review";
             report.CreatedDate = DateTime.Now;
@@ -26,6 +33,9 @@ namespace WebDevelopment.Controllers
         }
         public IActionResult Index()
         {
+            ViewBag.UserRole = "Manager";
+
+
             return View(_reports);
         }
         // EDIT GET
@@ -83,6 +93,38 @@ namespace WebDevelopment.Controllers
             report.ManagerComment = comment;
 
             return RedirectToAction("Index");
+        }
+        public IActionResult Details(int id)
+        {
+            var report = _reports.FirstOrDefault(r => r.ReportId == id);
+            if (report == null)
+            {
+                return NotFound();
+            }
+            return View(report);
+        }
+        [HttpPost]
+        public IActionResult AddComment(int ReportId, string Comment)//بحث يستخدم لان بعد مدير يكتب تعليق سيرفر مش حيعرف لمن تعليق هذا فهو حيتعامل بالرقم عشان يوصل فالريبورت
+        {
+            
+            var report = _reports.FirstOrDefault(r => r.ReportId == ReportId);
+
+           
+            if (report == null)
+            {
+                return NotFound();
+            }
+
+            
+            report.ManagerComment = Comment;
+            report.Status = "Revision Required"; // تم تغيير الحالة تلقائياً ليفهم الموظف أنه مطلوب منه تعديل
+
+            // 3️⃣ حفظ التغييرات (إذا كنتِ تستخدمين قاعدة بيانات Entity Framework فكّي التعليق عن السطر التالي)
+            // _context.SaveChanges();
+
+            
+            return RedirectToAction("Index");
+
         }
 
     }

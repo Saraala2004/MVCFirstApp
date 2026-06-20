@@ -21,14 +21,11 @@
           href="~/css/site.css" />
 
     <style>
-
         body {
         background-color: #f3f4f6;
         margin: 0;
         overflow-x: hidden;
         }
-
-        /* TOP NAVBAR */
 
         .top-navbar {
         background-color: #d1d5db;
@@ -37,6 +34,11 @@
         align-items: center;
         justify-content: space-between;
         padding: 0 25px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1050;
         }
 
         .project-title {
@@ -53,17 +55,15 @@
         font-weight: 500;
         }
 
-        /* SIDEBAR */
-
         .sidebar {
         position: fixed;
-        top: 0;
+        top: 70px;
         left: -260px;
         width: 260px;
-        height: 100%;
+        height: calc(100% - 70px);
         background-color: #1f2937;
-        transition: 0.3s;
-        padding-top: 90px;
+        transition: 0.3s ease;
+        padding-top: 20px;
         z-index: 1000;
         }
 
@@ -83,22 +83,23 @@
         background-color: #374151;
         }
 
-        /* MENU BUTTON */
-
         .menu-btn {
         font-size: 35px;
         cursor: pointer;
         margin-right: 20px;
         }
 
-        /* CONTENT */
-
         .content {
         padding: 30px;
+        margin-top: 70px;
+        margin-left: 0px;
+        transition: 0.3s ease;
         }
 
+        .content.active {
+        margin-left: 260px;
+        }
     </style>
-
 </head>
 <body>
 
@@ -131,17 +132,14 @@
 
         <div class="nav-links">
 
-            <a href="#">Home</a>
+            <a href="/Manager/Dashboard">Home</a>
 
-            <a href="#">About</a>
+            <a href="/Home/About">About</a>
 
-            <a href="#">Help</a>
+            <a href="/Home/Help">Help</a>
 
-            <a href="#"
-               onclick="confirmLogout(event)">
-
+            <a href="#" onclick="confirmLogout(event)">
                 Logout
-
             </a>
 
         </div>
@@ -153,32 +151,16 @@
     <div class="sidebar"
          id="sidebar">
 
-        <a href="/Manager/Dashboard">
-
-            Dashboard
-
-        </a>
-
-        <a href="/Manager/Tasks">
-
-            Tasks
-
-        </a>
-
-        <a href="/Manager/Reports">
-
-            Reports
-
-        </a>
-
         
 
-        <a href="/Manager/Login">
+        <a asp-controller="Manager" asp-action="Dashboard">Dashboard</a>
+        <a asp-controller="Task" asp-action="Index">Tasks Statistics</a>
 
-            Login
+        <a asp-controller="Task" asp-action="Create"> Assign Tasks </a>
 
-        </a>
+        <a asp-controller="Report" asp-action="Index">Employee Reports </a>
 
+        
     </div>
 
     <!-- PAGE CONTENT -->
@@ -190,30 +172,12 @@
     </div>
 
     <!-- JAVASCRIPT -->
-
     <script>
-
-        function toggleSidebar() {
-
-        document
-        .getElementById("sidebar")
-        .classList
-        .toggle("active");
-        }
-
-        function logoutConfirm() {
-
-        let result =
-        confirm("Are you sure you want to logout?");
-
-        if (result) {
-
-        window.location.href =
-        "/Manager/Login";
-        }
-        }
-
-    </script>
+    function toggleSidebar()
+    {
+    document.getElementById("sidebar").classList.toggle("active");
+    document.querySelector(".content").classList.toggle("active");
+    } </script>
     <script>
 
         function confirmLogout(event) {

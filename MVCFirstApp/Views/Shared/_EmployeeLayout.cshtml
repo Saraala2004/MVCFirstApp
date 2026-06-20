@@ -37,6 +37,11 @@
         align-items: center;
         justify-content: space-between;
         padding: 0 25px;
+        position: fixed; /* تعديل: يخلي الهيدر ثابت في مكانه فوق الشاشة ديماً */
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1050; /* تعديل: رقم عالي يضمن الهيدر يكون فوق الداشبورد ومش متغطي */
         }
 
         .project-title {
@@ -57,14 +62,14 @@
 
         .sidebar {
         position: fixed;
-        top: 0;
+        top: 70px; /* تعديل: تبدأ من تحت الهيدر بـ 70 بكسل عشان ما تغطيش على كتيبة الهيدر */
         left: -260px;
         width: 260px;
-        height: 100%;
+        height: calc(100% - 70px); /* تعديل: تأخذ باقي طول الشاشة تحت الهيدر */
         background-color: #1f2937;
-        transition: 0.3s;
-        padding-top: 90px;
-        z-index: 1000;
+        transition: 0.3s ease;
+        padding-top: 20px;
+        z-index: 1000; /* تحت الهيدر وفوق محتوى الصفحة */
         }
 
         .sidebar.active {
@@ -95,6 +100,14 @@
 
         .content {
         padding: 30px;
+        margin-top: 70px; /* تعديل: مسافة أمان من فوق عشان الجدول ما يخش تحت الهيدر الثابت */
+        margin-left: 0px; /* تعديل: يبدأ من الصفر ولما تفتح القائمة يندف بالـ JavaScript */
+        transition: 0.3s ease;
+        }
+
+        /* تعديل إضافي: الحالة لما يندف المحتوى لليمين */
+        .content.active {
+        margin-left: 260px;
         }
 
     </style>
@@ -190,22 +203,15 @@
     <script>
 
         function toggleSidebar() {
-
-        document
-        .getElementById("sidebar")
-        .classList
-        .toggle("active");
+        // الكود الذكي والجديد: يضيف ويشيل الكلاس بس والـ CSS يتكفل بالباقي
+        document.getElementById("sidebar").classList.toggle("active");
+        document.querySelector(".content").classList.toggle("active");
         }
 
         function logoutConfirm() {
-
-        let result =
-        confirm("Are you sure you want to logout?");
-
+        let result = confirm("Are you sure you want to logout?");
         if (result) {
-
-        window.location.href =
-        "/Manager/Login";
+        window.location.href = "/Manager/Login";
         }
         }
 

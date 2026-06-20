@@ -1,6 +1,27 @@
 ﻿@model List<MVCFirstApp.Models.Report>
 
+
+@{
+    // 🔒 الطريقة الرسمية: النظام يفحص كوكيز الأمان (Auth Cookie) القادمة من قاعدة البيانات تلقائياً
+    if (User.Identity.IsAuthenticated && User.IsInRole("Manager"))
+    {
+        Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+    }
+    else if (User.Identity.IsAuthenticated && User.IsInRole("Employee"))
+    {
+        Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml"; // الافتراضي للزوار
+    }
+}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <h2>Reports List</h2>
+
+
 
 <table class="table table-bordered">
 
@@ -11,7 +32,10 @@
             <th>User ID</th>
             <th>Summary</th>
             <th>Status</th>
-            <th>Comment</th>
+            @if (ViewBag.UserRole == "Employee")
+            {
+                <th>Manager Comment</th>
+            }
             <th>Created Date</th>
             <th>Actions</th>
         </tr>
@@ -32,31 +56,43 @@
                 <td>@report.Summary</td>
 
                 <td>@report.Status</td>
-
-                <td>@report.ManagerComment</td>
-
+                @if (ViewBag.UserRole == "Employee")
+                {
+                    <td>@report.ManagerComment</td>
+                }
                 <td>@report.CreatedDate</td>
 
                 <td>
+                    @if (ViewBag.UserRole == "Employee")
+                    {
+                        <a asp-action="Edit"
+                           asp-route-id="@report.ReportId"
+                           class="btn btn-warning btn-sm">
+                            Edit
+                        </a>
+                    }
+                    else if (ViewBag.UserRole == "Manager")
 
-                    <a asp-action="Edit"
-                       asp-route-id="@report.ReportId"
-                       class="btn btn-warning btn-sm">
-                        Edit
-                    </a>
+                    {
 
-                    <a asp-action="Approve"
-                       asp-route-id="@report.ReportId"
-                       class="btn btn-success btn-sm">
-                        Approve
-                    </a>
+                        <a asp-action="ApproveAndArchive" asp-route-id="@report.ReportId"
+                           class="btn btn-success btn-sm"
+                           onclick="confirmApprove(event, this.href)">
+                            Approve & Achive
+                        </a>
+                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#commentModal" onclick="setReportId('@report.ReportId')">
+                            Request Revision
+                        </button>
 
-                    <a href="@Url.Action("Delete", new { id = report.ReportId })"
-                       class="btn btn-danger btn-sm"
-                       onclick="confirmDelete(event, this.href)">
-                        Delete
-                    </a>
-
+                        <a href="@Url.Action("Delete", new { id = report.ReportId })"
+                           class="btn btn-danger btn-sm"
+                           onclick="confirmDelete(event, this.href)">
+                            Delete
+                        </a>
+                        <a asp-action="Details" asp-route-id="@report.ReportId" class="btn btn-info btn-sm">
+                            Details
+                        </a>
+                    }
                 </td>
 
             </tr>
@@ -68,29 +104,107 @@
     
 </table>
 
-<a asp-action="Create" class="btn btn-primary">
-    Create New Report
-</a>
+
 <script>
     function confirmDelete(event, url) {
 
-        event.preventDefault();
+    event.preventDefault();
 
-        Swal.fire({
-            title: 'Delete Report?',
-            text: 'This Report will be permanently deleted.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, Delete',
-            cancelButtonText: 'Cancel',
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#6c757d'
-        }).then((result) => {
+    Swal.fire({
+    title: 'Delete Report?',
+    text: 'This Report will be permanently deleted.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, Delete',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#6c757d'
+    }).then((result) => {
 
-            if (result.isConfirmed) {
-                window.location.href = url;
-            }
+    if (result.isConfirmed) {
+    window.location.href = url;
+    }
 
-        });
+    });
+    }
+    function confirmApprove(event, url) {
+    event.preventDefault(); // منع الزر من الانتقال الفوري حتى يوافق المدير
+
+    Swal.fire({
+    title: 'Approve & Archive?',
+    text: 'This report will be approved and moved directly to the archives.',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, Approve',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#198754', // لون أخضر مناسب للاعتماد
+    cancelButtonColor: '#6c757d'
+    }).then((result) => {
+    if (result.isConfirmed) {
+    window.location.href = url; // الانتقال للدالة في الكنترولر وتحديث الداتابيز
+    }
+    });
+    }
+</script>
+<div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="commentModalLabel">Add Revision Comment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="AddComment" method="post" onsubmit="showSuccessMessage(event)">
+                <div class="modal-body">
+                    <input type="hidden" id="modalReportId" name="ReportId" />
+
+                    <div class="mb-3">
+                        <label class="form-label font-weight-bold">Write your notes for the employee:</label>
+                        <textarea name="Comment" class="form-control" rows="4" required placeholder="Type the reasons for revision here..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Send Comment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* 📜 كود جافاسكريبت بسيط لتمرير الـ ID وإظهار رسالة النجاح *@
+
+
+<script>
+    function setReportId(id) {
+    document.getElementById('modalReportId').value = id;
+    }
+
+    function showSuccessMessage(event) {
+    event.preventDefault();
+    var form = event.target;
+    var submitButton = form.querySelector('button[type="submit"]') || form.querySelector('input[type="submit"]');
+    if (submitButton) {
+    submitButton.disabled = true;
+    submitButton.innerHTML = "Send Commint";
+    }
+    Swal.fire({
+    title: 'Success!',
+    text: 'Your comment has been sent successfully.',
+    icon: 'success',
+    confirmButtonText: 'OK',
+    confirmButtonColor: '#0dcaf0'
+    });
+    }
+</script>
+
+<script>
+    function showFullComment(fullText) {
+    Swal.fire({
+    title: 'Manager Comment',
+    text: fullText,
+    icon: 'info',
+    confirmButtonText: 'Close',
+    confirmButtonColor: '#0dcaf0'
+    });
     }
 </script>

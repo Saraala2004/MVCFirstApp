@@ -1,0 +1,26 @@
+﻿@model MVCFirstApp.Models.Report
+@{
+    Layout = "~/Views/Shared/ManagerLayout.cshtml";
+}
+<h2 style="color: deepskyblue;">Report Details</h2>
+
+<div class="card p-4 shadow-sm">
+    <input type="hidden" asp-for="TaskId" />
+    <input type="hidden" asp-for="UserId" />
+
+    <div class="mb-3">
+        <label class="form-label font-weight-bold">Summary</label>
+        <textarea asp-for="Summary" class="form-control" rows="3" readonly></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label font-weight-bold">Employee Opinion</label>
+        <textarea asp-for="EmployeeOpinion" class="form-control" rows="5" readonly></textarea>
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Index" class="btn btn-info text-white">
+            Back to List
+        </a>
+    </div>
+</div>
