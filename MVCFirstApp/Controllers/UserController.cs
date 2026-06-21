@@ -7,10 +7,7 @@ namespace MVCFirstApp.Controllers
     public class UserController : Controller
     {
         public static List<User> users = new List<User>();
-        public IActionResult Index()
-        {
-            return View();
-        }
+      
 
         // GET
         public IActionResult Create()
