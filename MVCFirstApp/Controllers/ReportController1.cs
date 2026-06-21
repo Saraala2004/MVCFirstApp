@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MVCFirstApp.Models;
-using MVCFirstApp.Models;
 
 namespace WebDevelopment.Controllers
 {
