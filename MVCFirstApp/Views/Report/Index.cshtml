@@ -1,20 +1,8 @@
 ﻿@model List<MVCFirstApp.Models.Report>
-
-
 @{
-    // 🔒 الطريقة الرسمية: النظام يفحص كوكيز الأمان (Auth Cookie) القادمة من قاعدة البيانات تلقائياً
-    if (User.Identity.IsAuthenticated && User.IsInRole("Manager"))
-    {
-        Layout = "~/Views/Shared/_ManagerLayout.cshtml";
-    }
-    else if (User.Identity.IsAuthenticated && User.IsInRole("Employee"))
-    {
-        Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
-    }
-    else
-    {
-        Layout = "~/Views/Shared/_Layout.cshtml"; // الافتراضي للزوار
-    }
+    Layout = User.IsInRole("Manager")
+        ? "~/Views/Shared/_ManagerLayout.cshtml"
+        : "~/Views/Shared/_EmployeeLayout.cshtml";
 }
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -65,33 +53,19 @@
                 <td>
                     @if (ViewBag.UserRole == "Employee")
                     {
-                        <a asp-action="Edit"
-                           asp-route-id="@report.ReportId"
-                           class="btn btn-warning btn-sm">
+                        <a asp-action="Edit" asp-route-id="@report.ReportId" class="btn btn-primary btn-sm">
                             Edit
                         </a>
-                    }
-                    else if (ViewBag.UserRole == "Employee")
-
-                    {
-
-                        <a asp-action="ApproveAndArchive" asp-route-id="@report.ReportId"
-                           class="btn btn-success btn-sm"
-                           onclick="confirmApprove(event, this.href)">
-                            Approve & Achive
-                        </a>
-                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#commentModal" onclick="setReportId('@report.ReportId')">
-                            Request Revision
-                        </button>
-
-                        <a href="@Url.Action("Delete", new { id = report.ReportId })"
-                           class="btn btn-danger btn-sm"
-                           onclick="confirmDelete(event, this.href)">
+                        <a asp-action="Delete" asp-route-id="@report.ReportId" class="btn btn-danger btn-sm">
                             Delete
                         </a>
+                    }
+                    else
+                    {
                         <a asp-action="Details" asp-route-id="@report.ReportId" class="btn btn-info btn-sm">
                             Details
                         </a>
+
                     }
                 </td>
 
@@ -156,7 +130,6 @@
             <form asp-action="AddComment" method="post" onsubmit="showSuccessMessage(event)">
                 <div class="modal-body">
                     <input type="hidden" id="modalReportId" name="ReportId" />
-
                     <div class="mb-3">
                         <label class="form-label font-weight-bold">Write your notes for the employee:</label>
                         <textarea name="Comment" class="form-control" rows="4" required placeholder="Type the reasons for revision here..."></textarea>

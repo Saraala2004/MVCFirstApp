@@ -31,14 +31,13 @@
                    required
                    value="@Model.DueDate.ToString("yyyy-MM-ddTHH:mm")" />
         </div>
-
         <div class="mb-3">
             <label>Employee Name</label>
             <select name="AssignedToUserName" class="form-control" required>
-                <option value="Ahmed">Ahmed</option>
-                <option value="Ali">Ali</option>
-                <option value="Mohammed">Mohammed</option>
-                <option value="Asmaa">Asmaa</option>
+                @foreach (var user in ViewBag.Users)
+                {
+                    <option value="@user.UserName">@user.UserName</option>
+                }
             </select>
         </div>
 

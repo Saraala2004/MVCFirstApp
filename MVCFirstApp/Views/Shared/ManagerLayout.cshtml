@@ -138,9 +138,7 @@
 
             <a href="/Home/Help">Help</a>
 
-            <a href="#" onclick="confirmLogout(event)">
-                Logout
-            </a>
+            <a href="#" onclick="logoutConfirm()">Logout</a>
 
         </div>
 
@@ -173,45 +171,65 @@
 
     <!-- JAVASCRIPT -->
     <script>
-    function toggleSidebar()
-    {
-    document.getElementById("sidebar").classList.toggle("active");
-    document.querySelector(".content").classList.toggle("active");
-    } </script>
-    <script>
+        function toggleSidebar() {
+        document.getElementById("sidebar").classList.toggle("active");
+        document.querySelector(".content").classList.toggle("active");
+        }</script>
+        <script>
 
-        function confirmLogout(event) {
-        event.preventDefault();
+            function confirmLogout(event) {
+            event.preventDefault();
 
-        Swal.fire({
+            Swal.fire({
 
-        title: 'Logout?',
+            title: 'Logout?',
 
-        text: 'Are you sure you want to logout?',
+            text: 'Are you sure you want to logout?',
 
-        icon: 'warning',
+            icon: 'warning',
 
-        showCancelButton: true,
+            showCancelButton: true,
 
-        confirmButtonText: 'Yes, Logout',
+            confirmButtonText: 'Yes, Logout',
 
-        cancelButtonText: 'Cancel',
+            cancelButtonText: 'Cancel',
 
-        confirmButtonColor: '#d33',
+            confirmButtonColor: '#d33',
 
-        cancelButtonColor: '#6c757d'
+            cancelButtonColor: '#6c757d'
 
-        }).then((result) => {
+            }).then((result) => {
 
-        if (result.isConfirmed) {
+            if (result.isConfirmed) {
+            window.location.href = "/Manager/Login";
+            }
 
-        window.location.href = "/Manager/Login";
-        }
+            });
+            }
 
-        });
-        }
+        </script>
+        <script>
+            function logoutConfirm() {
 
-    </script>
-</body>
+            Swal.fire({
+            title: 'Logout?',
+            text: 'Are you sure you want to logout?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Logout',
+            cancelButtonText: 'Cancel'
+            }).then((result) => {
+
+            if (result.isConfirmed) {
+
+            window.location.href = '/Login/Login';
+
+            }
+
+            });
+
+            }
+        </script>
+    </body>
 
 </html>

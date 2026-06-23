@@ -1,76 +1,54 @@
 ﻿@model MVCFirstApp.Models.User
 
+@{
+    ViewData["Title"] = "Edit User";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
 <h1>Edit User</h1>
 
-<form asp-action="Edit" style="width:320px" autocomplete="off">
-   
-  
-  
-   
+<form asp-action="Edit" method="post" style="width:320px" autocomplete="off">
+
+    <input type="hidden" asp-for="UserId" />
+
     <div asp-validation-summary="All" class="text-danger"></div>
+
     <div class="mb-3">
-
         <label>👤 User Name</label>
-
         <input asp-for="UserName"
                type="text"
                style="width:320px; height:35px;" />
-
-        <span asp-validation-for="UserName"
-              class="text-danger"></span>
-
+        <span asp-validation-for="UserName" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-
         <label>📧 Email</label>
-
         <input asp-for="Email"
                type="email"
                style="width:320px; height:35px;" />
-
-        <span asp-validation-for="Email"
-              class="text-danger"></span>
-
+        <span asp-validation-for="Email" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-
         <label>🔒 Password</label>
-
         <input asp-for="Password"
                type="password"
                style="width:320px; height:35px;" />
-
-        <span asp-validation-for="Password"
-              class="text-danger"></span>
-
+        <span asp-validation-for="Password" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-
         <label>🛡 Role Id</label>
-
         <input asp-for="RoleId"
                type="number"
                min="1"
                max="3"
                style="width:320px; height:35px;" />
-
-        <span asp-validation-for="RoleId"
-              class="text-danger"></span>
-
+        <span asp-validation-for="RoleId" class="text-danger"></span>
     </div>
-    <button type="submit"
-            style="background-color:green;
-        color:white;
-        border:none;
-        padding:10px 20px;
-        border-radius:5px;">
 
+    <button type="submit" class="btn btn-success">
         Update
-
     </button>
-   
 
 </form>

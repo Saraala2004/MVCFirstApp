@@ -1,29 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MVCFirstApp.Models;
-
+using MVCFirstApp.Data;
 namespace MVCFirstApp.Controllers
 {
     public class TaskController : Controller
     {
-        static List<TaskItem> tasks = new List<TaskItem>();
+        private readonly ApplicationDbContext _context;
+        public TaskController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
+            var tasks = _context.TaskItems.ToList();
+
             ViewBag.NotStartedTasks = tasks.Count(t => t.Status == "Not Started");
-
             ViewBag.CompletedTasks = tasks.Count(t => t.Status == "Completed");
-
             ViewBag.InProgressTasks = tasks.Count(t => t.Status == "In Progress");
-
             ViewBag.DelayedTasks = tasks.Count(t => t.Status == "Delayed");
 
             UpdateTaskStatus();
 
-
             return View(tasks);
-
         }
-        private void UpdateTaskStatus()//دالة اللي تعدل التاسك حالتها في فال فات موعد الديو ديت وهي ماتنفذتش 
+
+        private void UpdateTaskStatus()
         {
+            var tasks = _context.TaskItems.ToList();
+
             foreach (var task in tasks)
             {
                 if (task.DueDate.Date < DateTime.Now.Date && task.Status != "Completed")
@@ -31,35 +36,47 @@ namespace MVCFirstApp.Controllers
                     task.Status = "Delayed";
                 }
             }
+
+            _context.SaveChanges();
         }
 
         public IActionResult Create()
-        {//Get 
+        {
             var newtask = new TaskItem();
-
             newtask.DueDate = DateTime.Now;
+
+            ViewBag.Users = _context.Users.ToList();
 
             return View(newtask);
         }
+
         [HttpPost]
-        public IActionResult Create(TaskItem task)  // POST
+        public IActionResult Create(TaskItem task)
         {
-            var newtask = new TaskItem();
-            newtask.Id = tasks.Count + 1;
-            newtask.Title = task.Title;
-            newtask.DueDate = task.DueDate;
-            newtask.TargetEntity = task.TargetEntity;
-            newtask.Description = task.Description;
-            newtask.AssignedToUserName = task.AssignedToUserName;
-            tasks.Add(newtask);
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Users = _context.Users
+    .Where(x => x.RoleId == 2)
+    .ToList();
+                return View(task);
+            }
+
+            task.Status = "Not Started";
+            task.IsAchived = false;
+
+            _context.TaskItems.Add(task);
+            _context.SaveChanges();
+
             TempData["Success"] = "Task created successfully";
+
             return RedirectToAction("TasksList");
         }
 
         public IActionResult TasksList(int? id, string employeeName)
         {
+            UpdateTaskStatus();
 
-            var filteredTasks = tasks.AsEnumerable();
+            var filteredTasks = _context.TaskItems.AsEnumerable();
 
             if (id != null)
             {
@@ -69,41 +86,43 @@ namespace MVCFirstApp.Controllers
             if (!string.IsNullOrEmpty(employeeName))
             {
                 filteredTasks = filteredTasks.Where(t =>
-               t.AssignedToUserName != null &&
-              t.AssignedToUserName.Trim().ToLower()
-               .Contains(employeeName.Trim().ToLower()));
+                    t.AssignedToUserName != null &&
+                    t.AssignedToUserName.Trim().ToLower()
+                    .Contains(employeeName.Trim().ToLower()));
             }
-            UpdateTaskStatus();
+
             return View(filteredTasks.ToList());
         }
+
         public IActionResult Delete(int id)
         {
-            var task = tasks.FirstOrDefault(t => t.Id == id);
+            var task = _context.TaskItems.FirstOrDefault(t => t.Id == id);
 
             if (task != null)
             {
-                tasks.Remove(task);
+                _context.TaskItems.Remove(task);
+                _context.SaveChanges();
             }
 
             return RedirectToAction("TasksList");
         }
+
         public IActionResult Edit(int id)
         {
-            var task = tasks.FirstOrDefault(t => t.Id == id);
-            ViewBag.Users = new List<string>
-    {
-        "Ahmed",
-        "Ali",
-        "Asma",
-        "Mohammed"
-    };
+            var task = _context.TaskItems.FirstOrDefault(t => t.Id == id);
+
+            ViewBag.Users = _context.Users
+    .Where(x => x.RoleId == 2)
+    .Select(x => x.UserName)
+    .ToList();
 
             return View(task);
         }
+
         [HttpPost]
         public IActionResult Edit(TaskItem updatedTask)
         {
-            var task = tasks.FirstOrDefault(t => t.Id == updatedTask.Id);
+            var task = _context.TaskItems.FirstOrDefault(t => t.Id == updatedTask.Id);
 
             if (task != null)
             {
@@ -112,17 +131,21 @@ namespace MVCFirstApp.Controllers
                 task.TargetEntity = updatedTask.TargetEntity;
                 task.DueDate = updatedTask.DueDate;
                 task.AssignedToUserName = updatedTask.AssignedToUserName;
+
+                _context.SaveChanges();
             }
 
             return RedirectToAction("TasksList");
         }
+
         public IActionResult MyTasks()
         {
-            return View(tasks);
+            return View(_context.TaskItems.ToList());
         }
+
         public IActionResult Details(int id)
         {
-            var task = tasks.FirstOrDefault(t => t.Id == id);
+            var task = _context.TaskItems.FirstOrDefault(t => t.Id == id);
 
             if (task == null)
                 return NotFound();
@@ -130,5 +153,4 @@ namespace MVCFirstApp.Controllers
             return View(task);
         }
     }
-
 }

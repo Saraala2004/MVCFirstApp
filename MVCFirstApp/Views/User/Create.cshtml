@@ -1,79 +1,88 @@
 ﻿@model MVCFirstApp.Models.User
 
+@{
+    ViewData["Title"] = "Add User";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
 <h1>Add User</h1>
 
 <form method="post" style="width:320px" autocomplete="off">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="mb-3">
 
+    <div class="mb-3">
         <label>👤 User Name</label>
 
         <input asp-for="UserName"
                type="text"
-               style="width:320px; height:35px;"      />
+               style="width:320px; height:35px;" />
 
-        <span asp-validation-for="UserName"
-              class="text-danger"></span>
+        <span asp-validation-for="UserName" class="text-danger"></span>
 
+        @if (ViewBag.UserError != null)
+        {
+            <span class="text-danger">@ViewBag.UserError</span>
+        }
     </div>
 
-    <div class="mb-3">
 
+    <div class="mb-3">
         <label>📧 Email</label>
 
         <input asp-for="Email"
                type="email"
-               style="width:320px; height:35px;"      />
+               style="width:320px; height:35px;" />
 
-        <span asp-validation-for="Email"
-              class="text-danger"></span>
+        <span asp-validation-for="Email" class="text-danger"></span>
 
+        @if (ViewBag.EmailError != null)
+        {
+            <span class="text-danger">@ViewBag.EmailError</span>
+        }
     </div>
 
-    <div class="mb-3">
 
+    <div class="mb-3">
         <label>🔒 Password</label>
 
         <input asp-for="Password"
                type="password"
-               style="width:320px; height:35px;"             />
+               style="width:320px; height:35px;" />
 
-        <span asp-validation-for="Password"
-              class="text-danger"></span>
-
+        <span asp-validation-for="Password" class="text-danger"></span>
     </div>
 
-    <div class="mb-3">
 
-        <label>🛡️ Role Id</label>
+    <div class="mb-3">
+        <label>🛡 Role Id</label>
 
         <input asp-for="RoleId"
                type="number"
                min="1"
                max="3"
-               style="width:320px; height:35px;"       />
+               style="width:320px; height:35px;" />
 
-        <span asp-validation-for="RoleId"
-              class="text-danger"></span>
+        <span asp-validation-for="RoleId" class="text-danger"></span>
 
+        @if (ViewBag.RoleError != null)
+        {
+            <span class="text-danger">@ViewBag.RoleError</span>
+        }
     </div>
 
-    <button type="submit"
-            class="btn btn-primary">
+
+    <button type="submit" class="btn btn-primary">
         Save
     </button>
 
 </form>
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+
+
 <hr />
 
 <h2>Users List</h2>
 
 <table class="table">
+
     <thead>
         <tr>
             <th>User Name</th>
@@ -83,13 +92,17 @@
         </tr>
     </thead>
 
+
     <tbody>
 
         @foreach (var item in ViewBag.Users)
         {
             <tr>
+
                 <td>@item.UserName</td>
+
                 <td>@item.Email</td>
+
 
                 <td>
                     @(item.RoleId == 1 ? "Admin" :
@@ -97,24 +110,27 @@
                       item.RoleId == 3 ? "Manager" : "Unknown")
                 </td>
 
-           
-                    <td>
 
-                        <a asp-action="Edit"
-                           asp-route-id="@item.UserId"
-                           class="btn btn-warning btn-sm text-white">
-                            ✏️ Edit
-                        </a>
+                <td>
 
-                        <a asp-action="Delete"
-                           asp-route-id="@item.UserId"
-                           class="btn btn-danger btn-sm text-white">
-                            🗑️ Delete
-                        </a>
+                    <a asp-action="Edit"
+                       asp-route-id="@item.UserId"
+                       class="btn btn-warning btn-sm text-white">
+                        ✏️ Edit
+                    </a>
 
-                    </td>
+
+                    <a asp-action="Delete"
+                       asp-route-id="@item.UserId"
+                       class="btn btn-danger btn-sm text-white">
+                        🗑 Delete
+                    </a>
+
+                </td>
+
             </tr>
         }
 
     </tbody>
+
 </table>

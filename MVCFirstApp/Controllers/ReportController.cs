@@ -1,13 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MVCFirstApp.Models;
+using MVCFirstApp.Data;
 
-
-namespace WebDevelopment.Controllers
+namespace MVCFirstApp.Controllers
 {
     public class ReportController : Controller
     {
-        static List<TaskItem> tasks = new List<TaskItem>();
-        private static List<Report> _reports = new List<Report>();
+        private readonly ApplicationDbContext _context;
+
+        public ReportController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+
         public IActionResult Create(int taskId)
         {
             var report = new Report
@@ -15,117 +21,146 @@ namespace WebDevelopment.Controllers
                 TaskId = taskId,
                 CreatedDate = DateTime.Now
             };
+
             return View(report);
         }
-        [HttpPost]
 
+
+        [HttpPost]
         public IActionResult Create(Report report)
         {
-           
+            if (!ModelState.IsValid)
+            {
+                return View(report);
+            }
 
-            report.ReportId = _reports.Count + 1;
             report.Status = "Pending Review";
             report.CreatedDate = DateTime.Now;
+            report.IsArchived = false;
 
-            _reports.Add(report);
+            _context.Reports.Add(report);
+            _context.SaveChanges();
 
             return RedirectToAction("Index");
         }
+
+
         public IActionResult Index()
         {
-            ViewBag.UserRole = "Manager";
+            ViewBag.UserRole = "Employee";
 
+            var reports = _context.Reports.ToList();
 
-            return View(_reports);
+            return View(reports);
         }
-        // EDIT GET
+
+
         public IActionResult Edit(int id)
         {
-            var report = _reports.FirstOrDefault(r => r.ReportId == id);
-            if (report == null) return NotFound();
+            var report = _context.Reports
+                .FirstOrDefault(r => r.ReportId == id);
+
+            if (report == null)
+                return NotFound();
 
             return View(report);
         }
 
-        // EDIT POST
+
         [HttpPost]
         public IActionResult Edit(Report updated)
         {
-            var report = _reports.FirstOrDefault(r => r.ReportId == updated.ReportId);
-            if (report == null) return NotFound();
+            var report = _context.Reports
+                .FirstOrDefault(r => r.ReportId == updated.ReportId);
+
+            if (report == null)
+                return NotFound();
 
             report.Summary = updated.Summary;
             report.EmployeeOpinion = updated.EmployeeOpinion;
-            report.Status = updated.Status;
+
+            _context.SaveChanges();
 
             return RedirectToAction("Index");
         }
 
-        // DELETE
+
         public IActionResult Delete(int id)
         {
-            var report = _reports.FirstOrDefault(r => r.ReportId == id);
+            var report = _context.Reports
+                .FirstOrDefault(r => r.ReportId == id);
 
             if (report != null)
-                _reports.Remove(report);
+            {
+                _context.Reports.Remove(report);
+                _context.SaveChanges();
+            }
 
             return RedirectToAction("Index");
         }
 
-        // APPROVE / REJECT (Manager)
+
         public IActionResult Approve(int id)
         {
-            var report = _reports.FirstOrDefault(r => r.ReportId == id);
-            if (report == null) return NotFound();
+            var report = _context.Reports
+                .FirstOrDefault(r => r.ReportId == id);
+
+            if (report == null)
+                return NotFound();
 
             report.Status = "Approved";
             report.IsArchived = true;
 
+            _context.SaveChanges();
+
             return RedirectToAction("Index");
         }
 
+
         public IActionResult Reject(int id, string comment)
         {
-            var report = _reports.FirstOrDefault(r => r.ReportId == id);
-            if (report == null) return NotFound();
+            var report = _context.Reports
+                .FirstOrDefault(r => r.ReportId == id);
+
+            if (report == null)
+                return NotFound();
 
             report.Status = "Needs Revision";
             report.ManagerComment = comment;
 
+            _context.SaveChanges();
+
             return RedirectToAction("Index");
         }
+
+
         public IActionResult Details(int id)
         {
-            var report = _reports.FirstOrDefault(r => r.ReportId == id);
+            var report = _context.Reports
+                .FirstOrDefault(r => r.ReportId == id);
+
             if (report == null)
-            {
                 return NotFound();
-            }
+
             return View(report);
         }
+
+
         [HttpPost]
-        public IActionResult AddComment(int ReportId, string Comment)//بحث يستخدم لان بعد مدير يكتب تعليق سيرفر مش حيعرف لمن تعليق هذا فهو حيتعامل بالرقم عشان يوصل فالريبورت
+        public IActionResult AddComment(int ReportId, string Comment)
         {
-            
-            var report = _reports.FirstOrDefault(r => r.ReportId == ReportId);
+            var report = _context.Reports
+                .FirstOrDefault(r => r.ReportId == ReportId);
 
-           
             if (report == null)
-            {
                 return NotFound();
-            }
 
-            
             report.ManagerComment = Comment;
-            report.Status = "Revision Required"; // تم تغيير الحالة تلقائياً ليفهم الموظف أنه مطلوب منه تعديل
+            report.Status = "Revision Required";
 
-            // 3️⃣ حفظ التغييرات (إذا كنتِ تستخدمين قاعدة بيانات Entity Framework فكّي التعليق عن السطر التالي)
-            // _context.SaveChanges();
+            _context.SaveChanges();
 
-            
             return RedirectToAction("Index");
-
         }
-
     }
 }
